@@ -1,0 +1,594 @@
+/* ============================================================
+   TROPİKAL BALIK - OKYANUS MACERASI
+   Stil Dosyası (style.css) - DÜZELTİLMİŞ SÜRÜM
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #021b26;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    touch-action: manipulation;
+}
+
+/* ============================================================
+   ANA OYUN KONTEYNERİ
+   ============================================================ */
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    animation: cameraDrift 8s ease-in-out infinite;
+}
+
+@keyframes cameraDrift {
+    0%   { transform: translate(0px, 0px); }
+    25%  { transform: translate(-2px, 1px); }
+    50%  { transform: translate(1px, 2px); }
+    75%  { transform: translate(2px, -1px); }
+    100% { transform: translate(0px, 0px); }
+}
+
+/* ============================================================
+   ARKA PLAN - OKYANUS KATMANLARI (PARALLAX)
+   ============================================================ */
+#ocean-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#layer-deep-water {
+    background: linear-gradient(
+        to bottom,
+        #7fd9e8 0%,
+        #3fb6d6 8%,
+        #1f8fc0 20%,
+        #146fa0 35%,
+        #0d5480 50%,
+        #0a3d63 65%,
+        #062945 80%,
+        #041a30 100%
+    );
+    animation: waterPulse 6s ease-in-out infinite;
+}
+
+@keyframes waterPulse {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.04); }
+}
+
+#layer-deep-water::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 200%;
+    height: 60px;
+    background: repeating-linear-gradient(
+        100deg,
+        rgba(255,255,255,0.08) 0px,
+        rgba(255,255,255,0.08) 20px,
+        transparent 20px,
+        transparent 45px
+    );
+    animation: waveShift 5s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes waveShift {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+#layer-sun-rays {
+    z-index: 2;
+    opacity: 0.5;
+    mix-blend-mode: screen;
+}
+
+.sun-ray {
+    position: absolute;
+    top: -10%;
+    width: 90px;
+    height: 140%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 250, 200, 0.55) 0%,
+        rgba(255, 250, 200, 0.15) 40%,
+        rgba(255, 250, 200, 0) 100%
+    );
+    transform-origin: top center;
+    filter: blur(2px);
+    animation: raySway 7s ease-in-out infinite;
+}
+
+.ray-1 { left: 5%;  width: 60px;  transform: rotate(8deg);   animation-delay: 0s; }
+.ray-2 { left: 22%; width: 100px; transform: rotate(-6deg);  animation-delay: 1.2s; }
+.ray-3 { left: 45%; width: 70px;  transform: rotate(10deg);  animation-delay: 2.4s; }
+.ray-4 { left: 68%; width: 90px;  transform: rotate(-9deg);  animation-delay: 0.8s; }
+.ray-5 { left: 85%; width: 55px;  transform: rotate(5deg);   animation-delay: 3s; }
+
+@keyframes raySway {
+    0%, 100% { transform: rotate(8deg) translateX(0); opacity: 0.4; }
+    50%      { transform: rotate(-8deg) translateX(15px); opacity: 0.65; }
+}
+
+#layer-far-rocks {
+    z-index: 3;
+    bottom: 0;
+    top: auto;
+    height: 45%;
+    animation: parallaxSlow 30s linear infinite;
+    opacity: 0.85;
+}
+
+.far-rock {
+    position: absolute;
+    bottom: 0;
+    filter: blur(1px);
+}
+
+#layer-seaweed {
+    z-index: 4;
+    bottom: 0;
+    top: auto;
+    height: 50%;
+    animation: parallaxMedium 22s linear infinite;
+}
+
+.seaweed {
+    position: absolute;
+    bottom: -5px;
+}
+
+.seaweed-strand {
+    transform-origin: bottom center;
+}
+
+.strand-1 {
+    animation: seaweedSway 4s ease-in-out infinite;
+}
+
+.strand-2 {
+    animation: seaweedSway 3.2s ease-in-out infinite reverse;
+}
+
+@keyframes seaweedSway {
+    0%, 100% { transform: rotate(-6deg); }
+    50%      { transform: rotate(8deg); }
+}
+
+#layer-foreground-reef {
+    z-index: 6;
+    bottom: 0;
+    top: auto;
+    height: 120px;
+    animation: parallaxFast 14s linear infinite;
+}
+
+@keyframes parallaxSlow {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-2%); }
+}
+@keyframes parallaxMedium {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-1.5%); }
+}
+@keyframes parallaxFast {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(-1%); }
+}
+
+/* ============================================================
+   KABARCIKLAR
+   ============================================================ */
+#bubbles-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bubble {
+    position: absolute;
+    bottom: -30px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        rgba(255,255,255,0.9) 0%,
+        rgba(200,240,255,0.4) 40%,
+        rgba(150,220,255,0.15) 70%,
+        transparent 100%
+    );
+    border: 1px solid rgba(255,255,255,0.3);
+    animation-name: bubbleRise;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes bubbleRise {
+    0% {
+        transform: translateY(0) translateX(0) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(-50vh) translateX(15px) scale(1);
+    }
+    90% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-105vh) translateX(-10px) scale(0.6);
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   ENGELLER - MERCAN SÜTUNLARI
+   ============================================================ */
+#pipes-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+}
+
+.pipe-pair {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 90px;
+}
+
+.pipe-top, .pipe-bottom {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));
+}
+
+.pipe-top {
+    top: 0;
+}
+
+.pipe-bottom {
+    bottom: 0;
+}
+
+/* ============================================================
+   BALIK (OYUNCU)
+   -- ÖNEMLİ DÜZELTME --
+   Konum artık SADECE JavaScript'teki transform: translate() ile
+   yönetiliyor. Burada left/top VERİLMEZ, aksi halde JS'in
+   hesapladığı hitbox ile CSS'in gösterdiği görsel konum
+   birbirinden kayar ve "sütuma çarpmadan geçtim ama öldüm"
+   hissi oluşur.
+   ============================================================ */
+#fish-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 140px;
+    height: 90px;
+    z-index: 10;
+    transform-origin: center center;
+    will-change: transform;
+}
+
+#fish-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+#fish-tail {
+    transform-origin: 20px 45px;
+    animation: tailSwing 0.45s ease-in-out infinite;
+}
+
+@keyframes tailSwing {
+    0%, 100% { transform: rotate(-18deg); }
+    50%      { transform: rotate(18deg); }
+}
+
+#fish-fin-side {
+    transform-origin: 62px 55px;
+    animation: sideFinFlap 0.6s ease-in-out infinite;
+}
+
+@keyframes sideFinFlap {
+    0%, 100% { transform: rotate(-12deg) scaleY(1); }
+    50%      { transform: rotate(10deg) scaleY(0.92); }
+}
+
+#fish-fin-top {
+    transform-origin: 58px 22px;
+    animation: topFinWave 1.4s ease-in-out infinite;
+}
+
+@keyframes topFinWave {
+    0%, 100% { transform: rotate(-5deg) skewX(0deg); }
+    50%      { transform: rotate(6deg) skewX(-4deg); }
+}
+
+#fish-fin-bottom {
+    transform-origin: 58px 68px;
+    animation: bottomFinWave 1.6s ease-in-out infinite;
+}
+
+@keyframes bottomFinWave {
+    0%, 100% { transform: rotate(5deg); }
+    50%      { transform: rotate(-6deg); }
+}
+
+#fish-body-group {
+    animation: bodyBreathe 1.2s ease-in-out infinite;
+    transform-origin: 70px 45px;
+}
+
+@keyframes bodyBreathe {
+    0%, 100% { transform: scale(1, 1); }
+    50%      { transform: scale(1.015, 0.985); }
+}
+
+/* ============================================================
+   SKOR GÖSTERGESİ
+   ============================================================ */
+#score-display {
+    position: absolute;
+    top: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    font-size: clamp(36px, 8vw, 64px);
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow:
+        0 0 8px rgba(0,0,0,0.4),
+        3px 3px 0 rgba(0,60,90,0.6),
+        -1px -1px 0 rgba(0,0,0,0.3);
+    -webkit-text-stroke: 1.5px #044a63;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 2px;
+    transition: transform 0.14s ease;
+}
+
+/* ============================================================
+   OVERLAY EKRANLAR (BAŞLANGIÇ / OYUN BİTTİ)
+   ============================================================ */
+.overlay-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+        circle at center,
+        rgba(4, 40, 60, 0.55) 0%,
+        rgba(2, 20, 32, 0.85) 100%
+    );
+    backdrop-filter: blur(3px);
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.screen-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 30px 40px;
+    background: rgba(6, 40, 58, 0.55);
+    border: 2px solid rgba(120, 220, 255, 0.35);
+    border-radius: 24px;
+    box-shadow:
+        0 0 40px rgba(60, 200, 255, 0.25),
+        inset 0 0 30px rgba(0, 0, 0, 0.2);
+    max-width: 90vw;
+    animation: screenPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes screenPopIn {
+    0%   { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.game-title {
+    font-size: clamp(28px, 6vw, 46px);
+    color: #ffe28a;
+    text-shadow: 0 0 12px rgba(255, 200, 80, 0.6), 2px 2px 0 rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.game-over-title {
+    font-size: clamp(28px, 6vw, 46px);
+    color: #ff7a6b;
+    text-shadow: 0 0 14px rgba(255, 90, 70, 0.6), 2px 2px 0 rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.game-subtitle {
+    color: #cdeeff;
+    font-size: clamp(14px, 3vw, 18px);
+    text-align: center;
+    opacity: 0.9;
+}
+
+.instructions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #dffaff;
+    font-size: clamp(13px, 3vw, 16px);
+    text-align: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.key-badge {
+    background: linear-gradient(180deg, #3fb6d6, #1a7fa8);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
+    font-size: 0.85em;
+}
+
+.game-button {
+    margin-top: 10px;
+    padding: 14px 38px;
+    font-size: clamp(16px, 4vw, 20px);
+    font-weight: 700;
+    color: #06303f;
+    background: linear-gradient(180deg, #ffe28a, #ffb84d);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #d68a1f, 0 8px 15px rgba(0,0,0,0.3);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    letter-spacing: 0.5px;
+}
+
+.game-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 #d68a1f, 0 10px 18px rgba(0,0,0,0.35);
+}
+
+.game-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #d68a1f, 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.best-score-label {
+    color: #a8f0ff;
+    font-size: clamp(13px, 3vw, 16px);
+    margin-top: 4px;
+}
+
+.score-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #ffffff;
+    font-size: clamp(16px, 4vw, 20px);
+}
+
+.score-summary span {
+    font-weight: 800;
+    color: #ffe28a;
+}
+
+.new-record {
+    color: #7dffb0;
+    font-weight: 800;
+    font-size: clamp(14px, 3.5vw, 18px);
+    text-shadow: 0 0 10px rgba(90, 255, 150, 0.6);
+    animation: recordBlink 1s ease-in-out infinite;
+}
+
+@keyframes recordBlink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* ============================================================
+   DOKUNMATİK İPUCU
+   ============================================================ */
+#tap-hint {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    color: #ffffff;
+    font-size: 14px;
+    background: rgba(0,0,0,0.4);
+    padding: 8px 16px;
+    border-radius: 20px;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE / MOBİL UYUM
+   ============================================================ */
+@media (max-width: 600px) {
+    #fish-wrapper {
+        width: 100px;
+        height: 65px;
+    }
+
+    .screen-content {
+        padding: 22px 24px;
+        gap: 10px;
+    }
+
+    #score-display {
+        top: 3%;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .screen-content {
+        padding: 14px 26px;
+        gap: 8px;
+        transform: scale(0.85);
+    }
+
+    #score-display {
+        font-size: 32px;
+        top: 2%;
+    }
+}
+
+#fish-wrapper, .pipe-pair, .bubble {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+    backface-visibility: hidden;
+      }
