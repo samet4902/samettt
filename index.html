@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tropikal Balık - Okyanus Macerası</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==================== ANA OYUN KONTEYNERİ ==================== -->
+    <div id="game-container">
+
+        <!-- ==================== ARKA PLAN KATMANLARI (PARALLAX) ==================== -->
+        <div id="ocean-background">
+            <!-- En derin katman: koyu su gradyanı -->
+            <div class="layer" id="layer-deep-water"></div>
+
+            <!-- Güneş ışınları katmanı -->
+            <div class="layer" id="layer-sun-rays">
+                <div class="sun-ray ray-1"></div>
+                <div class="sun-ray ray-2"></div>
+                <div class="sun-ray ray-3"></div>
+                <div class="sun-ray ray-4"></div>
+                <div class="sun-ray ray-5"></div>
+            </div>
+
+            <!-- Uzak kayalar / silüetler -->
+            <div class="layer" id="layer-far-rocks">
+                <svg class="far-rock" style="left:5%;" width="180" height="140" viewBox="0 0 180 140">
+                    <ellipse cx="90" cy="120" rx="90" ry="40" fill="#0a3d4a"/>
+                    <ellipse cx="60" cy="90" rx="55" ry="60" fill="#0a3d4a"/>
+                </svg>
+                <svg class="far-rock" style="left:40%;" width="220" height="160" viewBox="0 0 220 160">
+                    <ellipse cx="110" cy="130" rx="110" ry="45" fill="#0b3f4c"/>
+                    <ellipse cx="140" cy="95" rx="65" ry="70" fill="#0b3f4c"/>
+                </svg>
+                <svg class="far-rock" style="left:75%;" width="200" height="150" viewBox="0 0 200 150">
+                    <ellipse cx="100" cy="125" rx="100" ry="42" fill="#0a3d4a"/>
+                    <ellipse cx="80" cy="85" rx="60" ry="65" fill="#0a3d4a"/>
+                </svg>
+            </div>
+
+            <!-- Deniz bitkileri (sallanan) -->
+            <div class="layer" id="layer-seaweed">
+                <svg class="seaweed" style="left:8%;" width="60" height="220" viewBox="0 0 60 220">
+                    <path class="seaweed-strand strand-1" d="M30,220 Q10,180 30,140 Q50,100 30,60 Q10,30 30,0"
+                          stroke="#1f6d4a" stroke-width="10" fill="none" stroke-linecap="round"/>
+                    <path class="seaweed-strand strand-2" d="M15,220 Q0,170 20,130 Q35,90 15,50"
+                          stroke="#278a5b" stroke-width="7" fill="none" stroke-linecap="round"/>
+                </svg>
+                <svg class="seaweed" style="left:22%;" width="50" height="180" viewBox="0 0 50 180">
+                    <path class="seaweed-strand strand-2" d="M25,180 Q45,140 25,100 Q5,60 25,20"
+                          stroke="#1f6d4a" stroke-width="8" fill="none" stroke-linecap="round"/>
+                </svg>
+                <svg class="seaweed" style="right:10%;" width="70" height="240" viewBox="0 0 70 240">
+                    <path class="seaweed-strand strand-1" d="M35,240 Q15,200 35,160 Q55,120 35,80 Q15,50 35,10"
+                          stroke="#278a5b" stroke-width="11" fill="none" stroke-linecap="round"/>
+                    <path class="seaweed-strand strand-2" d="M50,240 Q65,190 45,150 Q30,110 50,70"
+                          stroke="#1f6d4a" stroke-width="6" fill="none" stroke-linecap="round"/>
+                </svg>
+                <svg class="seaweed" style="right:28%;" width="55" height="190" viewBox="0 0 55 190">
+                    <path class="seaweed-strand strand-1" d="M27,190 Q10,150 27,110 Q45,75 27,35"
+                          stroke="#278a5b" stroke-width="9" fill="none" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <!-- Ön plan mercan / kayalar (zemin dekoru) -->
+            <div class="layer" id="layer-foreground-reef">
+                <svg width="100%" height="120" viewBox="0 0 1600 120" preserveAspectRatio="none">
+                    <path d="M0,120 L0,60 Q50,20 100,55 Q150,80 200,40 Q260,10 320,50
+                             Q380,90 440,45 Q500,15 560,55 Q620,85 680,50 Q740,20 800,55
+                             Q860,90 920,45 Q980,15 1040,55 Q1100,85 1160,50 Q1220,20 1280,55
+                             Q1340,90 1400,45 Q1460,15 1520,55 Q1560,75 1600,60 L1600,120 Z"
+                          fill="#0c4a3e"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- ==================== KABARCIKLAR KATMANI ==================== -->
+        <div id="bubbles-layer"></div>
+
+        <!-- ==================== ENGELLER (MERCAN SÜTUNLARI) KATMANI ==================== -->
+        <div id="pipes-layer"></div>
+
+        <!-- ==================== OYUNCU: TROPİKAL BALIK ==================== -->
+        <div id="fish-wrapper">
+            <svg id="fish-svg" width="140" height="90" viewBox="0 0 140 90">
+                <defs>
+                    <!-- Gövde için gradyan: turuncu -> sarı -> mor tonları -->
+                    <linearGradient id="fishBodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff8a1e"/>
+                        <stop offset="30%" stop-color="#ff5f3e"/>
+                        <stop offset="55%" stop-color="#ffd23f"/>
+                        <stop offset="75%" stop-color="#6a3fd6"/>
+                        <stop offset="100%" stop-color="#3fa0ff"/>
+                    </linearGradient>
+
+                    <!-- Karın kısmı daha açık -->
+                    <linearGradient id="fishBellyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffe9a8" stop-opacity="0.95"/>
+                        <stop offset="100%" stop-color="#ffb84d" stop-opacity="0.6"/>
+                    </linearGradient>
+
+                    <!-- Yüzgeç gradyanı: yarı saydam -->
+                    <linearGradient id="finGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#3fd0ff" stop-opacity="0.75"/>
+                        <stop offset="100%" stop-color="#8a4fff" stop-opacity="0.35"/>
+                    </linearGradient>
+
+                    <!-- Kuyruk gradyanı -->
+                    <linearGradient id="tailGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff5f3e" stop-opacity="0.9"/>
+                        <stop offset="60%" stop-color="#a04fff" stop-opacity="0.65"/>
+                        <stop offset="100%" stop-color="#3fa0ff" stop-opacity="0.4"/>
+                    </linearGradient>
+
+                    <!-- Göz parlaklığı için radyal gradyan -->
+                    <radialGradient id="eyeShine" cx="35%" cy="30%" r="70%">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                    </radialGradient>
+
+                    <!-- Pul deseni -->
+                    <pattern id="scalePattern" width="14" height="12" patternUnits="userSpaceOnUse" patternTransform="translate(0,0)">
+                        <path d="M0,12 Q7,0 14,12" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.4"/>
+                    </pattern>
+
+                    <!-- Yumuşak gölge filtresi -->
+                    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#00121a" flood-opacity="0.35"/>
+                    </filter>
+                </defs>
+
+                <!-- Kuyruk (arkada, ayrı grup - animasyonla sallanacak) -->
+                <g id="fish-tail" filter="url(#softShadow)">
+                    <path d="M18,45 Q-15,15 -30,45 Q-15,75 18,45 Z" fill="url(#tailGradient)"/>
+                    <path d="M18,45 Q0,30 -12,45 Q0,60 18,45 Z" fill="#ffd23f" opacity="0.5"/>
+                </g>
+
+                <!-- Alt yüzgeç (karın altı, hareketli) -->
+                <g id="fish-fin-bottom">
+                    <path d="M55,68 Q45,88 65,80 Q60,70 55,68 Z" fill="url(#finGradient)"/>
+                </g>
+
+                <!-- Sırt yüzgeci (üst, hareketli) -->
+                <g id="fish-fin-top">
+                    <path d="M55,20 Q45,-2 70,10 Q65,20 55,20 Z" fill="url(#finGradient)"/>
+                </g>
+
+                <!-- Gövde -->
+                <g id="fish-body-group" filter="url(#softShadow)">
+                    <ellipse cx="70" cy="45" rx="48" ry="30" fill="url(#fishBodyGradient)"/>
+                    <!-- Karın parlaklığı -->
+                    <ellipse cx="72" cy="58" rx="34" ry="14" fill="url(#fishBellyGradient)"/>
+                    <!-- Pul deseni overlay -->
+                    <ellipse cx="70" cy="45" rx="48" ry="30" fill="url(#scalePattern)"/>
+                    <!-- Gövde üstü vurgu şeridi -->
+                    <path d="M30,32 Q70,18 112,34" stroke="#fff3c4" stroke-width="3" stroke-opacity="0.4" fill="none" stroke-linecap="round"/>
+                    <!-- Yanal çizgi desenleri -->
+                    <path d="M40,45 Q70,40 105,45" stroke="#6a2fb0" stroke-width="2" stroke-opacity="0.35" fill="none"/>
+                </g>
+
+                <!-- Yan yüzgeç (göğüs yüzgeci, hareketli) -->
+                <g id="fish-fin-side">
+                    <path d="M60,52 Q40,70 55,78 Q75,68 72,54 Z" fill="url(#finGradient)"/>
+                </g>
+
+                <!-- Kafa detayları / göz grubu -->
+                <g id="fish-head">
+                    <!-- Göz çukuru gölgesi -->
+                    <circle cx="103" cy="38" r="13" fill="#1a0f2e" opacity="0.15"/>
+                    <!-- Göz beyazı -->
+                    <circle cx="103" cy="38" r="10.5" fill="#fffdf5"/>
+                    <!-- İris -->
+                    <circle cx="104" cy="38" r="7" fill="#1b1006"/>
+                    <circle cx="104" cy="38" r="7" fill="#3a2110" opacity="0.4"/>
+                    <!-- Göz bebeği -->
+                    <circle cx="104.5" cy="38" r="3.6" fill="#000000"/>
+                    <!-- Canlı parlama -->
+                    <circle cx="106.5" cy="35" r="2.6" fill="url(#eyeShine)"/>
+                    <circle cx="102" cy="41" r="1" fill="#ffffff" opacity="0.7"/>
+                </g>
+
+                <!-- Ağız -->
+                <path d="M115,48 Q122,50 116,53" stroke="#7a2f10" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <!-- ==================== SKOR GÖSTERGESİ ==================== -->
+        <div id="score-display">0</div>
+
+        <!-- ==================== BAŞLANGIÇ EKRANI ==================== -->
+        <div id="start-screen" class="overlay-screen">
+            <div class="screen-content">
+                <h1 class="game-title">🐠 Tropikal Yüzüş</h1>
+                <p class="game-subtitle">Mercan sütunlarından geçerek yol al!</p>
+                <div class="instructions">
+                    <p><span class="key-badge">BOŞLUK</span> veya <span class="key-badge">DOKUN</span> ile yüz</p>
+                </div>
+                <button id="start-button" class="game-button">Oyuna Başla</button>
+                <p class="best-score-label">En Yüksek Skor: <span id="start-best-score">0</span></p>
+            </div>
+        </div>
+
+        <!-- ==================== OYUN BİTTİ EKRANI ==================== -->
+        <div id="game-over-screen" class="overlay-screen hidden">
+            <div class="screen-content">
+                <h1 class="game-over-title">Çarpışma!</h1>
+                <div class="score-summary">
+                    <p>Skorun: <span id="final-score">0</span></p>
+                    <p>En Yüksek Skor: <span id="final-best-score">0</span></p>
+                </div>
+                <p id="new-record-label" class="new-record hidden">🏆 Yeni Rekor!</p>
+                <button id="restart-button" class="game-button">Tekrar Oyna</button>
+            </div>
+        </div>
+
+        <!-- ==================== SES / DOKUNMATİK İPUCU (ilk etkileşim için) ==================== -->
+        <div id="tap-hint" class="hidden">Devam etmek için dokun</div>
+
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script src="script.js"></script>
+</body>
+  </html>
